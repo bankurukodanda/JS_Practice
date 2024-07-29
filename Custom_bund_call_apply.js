@@ -19,7 +19,7 @@ Function.prototype.myApply = function(...args){
 
 //Custom Call
 
-Function.prototype.myApply = function(...args){
+Function.prototype.myCall = function(...args){
  var context = args[0];
  
  context.fn = this;
