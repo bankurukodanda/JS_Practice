@@ -1,0 +1,53 @@
+<html>
+    <script>
+        const search = (function() {
+            let timer;
+            let shouldWait = false;
+            this.debounce=  function(callback, delay = 1000) {
+                /**
+                 * Debounce function limits the rate at which a function can fire.
+                 * The function will only execute after the specified delay has passed
+                 * since the last time it was invoked.
+                 */
+                return function(...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                    callback(...args);
+                    }, delay);
+                };
+            };
+            this.throttle = function(callback, delay = 1000) {
+                /**
+                 * Throttle function ensures that a function is only called once
+                 * in a specified time interval, regardless of how many times it is invoked.
+                 */
+                return function(...args) {
+                    if (!shouldWait) {
+                    callback(...args);
+                    shouldWait = true;
+                    setTimeout(() => {
+                        shouldWait = false;
+                    }, delay);
+                    }
+                };
+            };
+            return this;
+        })();
+        
+        function logTextOnce(){
+            search.debounce((e)=>{
+                console.log(e.target.value);
+            },1000)(event);
+        }
+         function logTextInIntervals(){
+            search.throttle((e)=>{
+                console.log(e.target.value);
+            },1000)(event);
+        }
+        
+    </script>
+    <body>
+        <input type="text" id="input" onkeypress="logTextOnce()" placeholder="Search"/>
+         <input type="text" id="throttleInput" onkeypress="logTextInIntervals()" placeholder="Search"/>
+    </body>
+</html>
