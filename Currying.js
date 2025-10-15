@@ -21,3 +21,27 @@ console.log(curriedSum(1)(2)(3)());      // Output: 6
 console.log(curriedSum(1, 2)(3)());      // Output: 6
 console.log(curriedSum(1)(2, 3)());      // Output: 6
 console.log(curriedSum(1, 2, 3)());      // Output: 6
+
+
+/** ================================================================================================================================== **/
+
+
+const curriedSum = function(...args){
+  if(args.length == sum.length){
+    return sum(...args);
+  } else{
+    return function(...args2){
+      args2 = [...args, ...args2]
+      return curriedSum(...args2)
+    };
+  }
+}
+function sum(a,b,c){
+  return a+b+c
+}
+console.log(curriedSum(1, 2, 7));  // Output: 23
+console.log(curriedSum(1)(2)(3));      // Output: 6
+console.log(curriedSum(1, 2)(3));      // Output: 6
+console.log(curriedSum(1)(2, 3));      // Output: 6
+console.log(curriedSum(1)(2, 3));      // Output: 6
+console.log(curriedSum(1, 2, 3));      // Output: 6
