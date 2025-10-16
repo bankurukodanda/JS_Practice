@@ -1,0 +1,39 @@
+
+let params=[];
+const curriedSum = function(...params){
+  var flag = params.some((a)=> (a === '_'));
+  if(!flag && params.length >= sum.length){
+    return sum(...params);
+  } else {
+    return (...args2)=>{
+      let mergeArray = [];
+      if(flag){
+        let argsIndex=0;
+        for(i=0; i< params.length; i++){
+          if(params[i] == '_'){
+             mergeArray.push(args2[argsIndex])
+             argsIndex++;
+          } else{
+            mergeArray.push(params[i])
+          }
+        }
+        for(j=argsIndex;j<args2.length; j++){
+          mergeArray.push(args2[j]);
+        }
+      } else{
+        mergeArray = [...params, ...args2];
+      }
+      return curriedSum(...mergeArray);
+    }
+  }
+  
+}
+function sum(a,b,c){
+  return a+b+c
+}
+console.log(curriedSum('_', 2, 7)(1));  // Output: 10
+console.log(curriedSum(1,'_')(2)(3));    // Output: 6
+console.log(curriedSum(1,'_')('_',2)(3,1));// Output: 6
+console.log(curriedSum(1, 2)(3));      // Output: 6
+console.log(curriedSum(1)('_', 3)(2));      // Output: 6
+console.log(curriedSum(1, 2, 3));      // Output: 6
