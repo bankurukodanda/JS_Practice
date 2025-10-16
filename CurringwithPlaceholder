@@ -1,5 +1,3 @@
-
-let params=[];
 const curriedSum = function(...params){
   var flag = params.some((a)=> (a === '_'));
   if(!flag && params.length >= sum.length){
