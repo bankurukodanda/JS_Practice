@@ -3,13 +3,13 @@ function MyPromise(executor){
     const FULFILLED = "fulfilled";
     const REJECTED = "rejected";
     let value = null;
-    let callback = [];
+    let handlers = [];
     let state= PENDING;
     function fulfilled(result){
         if(state == PENDING){
             state = FULFILLED;
             value = result;
-            callback.forEach(h=>h.onFulfilled(value))
+            handlers.forEach(h=>h.onFulfilled(value))
         }
         
     };
@@ -17,14 +17,13 @@ function MyPromise(executor){
         if(state == PENDING){
             state = REJECTED;
             value = result;
-            callback.forEach(h=>h.onRejected(value))
+            handlers.forEach(h=>h.onRejected(value))
         }
     }
     
     this.then=(onFulfilled, onRejected)=>{
         MyPromise((resolve, reject)=>{
             const handle = ()=>{
-                console.log("Then")
                 if (state === 'fulfilled') {
                     const res = onFulfilled ? onFulfilled(value) : value;
                     resolve(res);
@@ -32,7 +31,7 @@ function MyPromise(executor){
                     const res = onRejected ? onRejected(value) : value;
                     reject(res);
                 } else{
-                    callback.push({
+                    handlers.push({
                         "onFulfilled":val => {
                             try {
                               const res = onFulfilled ? onFulfilled(val) : val;
@@ -59,7 +58,7 @@ function MyPromise(executor){
         this.then(null, catchCallback)
     }
     this.finally=(finallyCallback)=>{
-        this.then(finallyCallback)
+        this.then(finallyCallback, finallyCallback)
     }
     executor(fulfilled, rejected);
     return this;
@@ -68,9 +67,8 @@ function MyPromise(executor){
 var test  = new MyPromise((resolve, reject)=>{
     console.log(this);
     setTimeout(()=>{
-        resolve("CusPromise")    
-    }, 5000)
-    // resolve("CusPromise")    
+        reject("CusPromise")    
+    }, 500)    
     
 })
 // test.then(()=>{
@@ -79,14 +77,11 @@ var test  = new MyPromise((resolve, reject)=>{
 //     console.log("reject")
 // })
 test.then((value)=>{
-    console.log(value);
     console.log("Success Handler");
 })
 test.catch((value)=>{
-    console.log(value)
     console.log("Error Handler");
 })
 test.finally((value)=>{
-    console.log(value)
     console.log("Finally");
 })
