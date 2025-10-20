@@ -1,0 +1,92 @@
+function MyPromise(executor){
+    const PENDING = "pending";
+    const FULFILLED = "fulfilled";
+    const REJECTED = "rejected";
+    let value = null;
+    let callback = [];
+    let state= PENDING;
+    function fulfilled(result){
+        if(state == PENDING){
+            state = FULFILLED;
+            value = result;
+            callback.forEach(h=>h.onFulfilled(value))
+        }
+        
+    };
+    function rejected(result){
+        if(state == PENDING){
+            state = REJECTED;
+            value = result;
+            callback.forEach(h=>h.onRejected(value))
+        }
+    }
+    
+    this.then=(onFulfilled, onRejected)=>{
+        MyPromise((resolve, reject)=>{
+            const handle = ()=>{
+                console.log("Then")
+                if (state === 'fulfilled') {
+                    const res = onFulfilled ? onFulfilled(value) : value;
+                    resolve(res);
+                } else if (state === 'rejected') {
+                    const res = onRejected ? onRejected(value) : value;
+                    reject(res);
+                } else{
+                    callback.push({
+                        "onFulfilled":val => {
+                            try {
+                              const res = onFulfilled ? onFulfilled(val) : val;
+                              resolve(res);
+                            } catch (e) {
+                              reject(e);
+                            }
+                        },
+                        "onRejected":val => {
+                            try {
+                              const res = onRejected ? onRejected(val) : val;
+                              resolve(res);
+                            } catch (e) {
+                              reject(e);
+                            }
+                        }
+                    })  
+                }
+            }
+            handle()
+        })
+    };
+    this.catch=(catchCallback)=>{
+        this.then(null, catchCallback)
+    }
+    this.finally=(finallyCallback)=>{
+        this.then(finallyCallback)
+    }
+    executor(fulfilled, rejected);
+    return this;
+}
+
+var test  = new MyPromise((resolve, reject)=>{
+    console.log(this);
+    setTimeout(()=>{
+        resolve("CusPromise")    
+    }, 5000)
+    // resolve("CusPromise")    
+    
+})
+// test.then(()=>{
+//     console.log("Test Then");
+// },()=>{
+//     console.log("reject")
+// })
+test.then((value)=>{
+    console.log(value);
+    console.log("Success Handler");
+})
+test.catch((value)=>{
+    console.log(value)
+    console.log("Error Handler");
+})
+test.finally((value)=>{
+    console.log(value)
+    console.log("Finally");
+})
