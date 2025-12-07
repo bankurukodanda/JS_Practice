@@ -1,0 +1,19 @@
+/**
+ * 
+ * 
+ * Object.prototype.toString: This is a method that returns the string "[object Object]" when called directly on an object.
+ * 
+ * .call(): This is a method that allows you to invoke a function with a specified this value and individual arguments.
+ * 
+ * How it works together:
+ *  When you use Object.prototype.toString.call(value), you are essentially "borrowing" the generic toString method from Object.prototype and explicitly calling it with value as its this context. 
+ *  The toString method then inspects the internal [[Class]] property of value and returns a string in the format "[object Type]", where Type accurately reflects the object's constructor or built-in type.
+ */
+
+function getPreciseType(value) {
+  if (value === null) {
+    return "null"; // typeof null is "object", so handle separately
+  }
+  const typeString = Object.prototype.toString.call(value);
+  return typeString.substring(8, typeString.length - 1); // Extract "Array", "Date", etc.
+}
