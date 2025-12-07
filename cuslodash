@@ -1,0 +1,80 @@
+function getPath(path){
+    if(typeof path =="string" && path.indexOf(".") != -1)
+      path = path.split('.');
+    else{
+      path=[path]
+    }
+  return path;
+}
+var _={
+    get:(obj, path, defaultValue = 'Unknown')=>{
+        path = getPath(path);
+        for(var i=0;i<path.length;i++){
+          if(obj== null || typeof obj != "object"){
+            return defaultValue
+          } else{
+            var key = path[i];
+            if(key[0]=='[') {
+              key = key.substring(1,key.length-1) 
+              obj = obj[key];
+            } else{
+              obj = obj[key];  
+            }
+            
+          }
+        } 
+        return obj;
+    },
+    set:(obj, path, value)=>{
+      baseObj= obj;
+      path = getPath(path);
+       for(var i=0;i<path.length-1;i++){
+        if(obj== null || typeof obj != "object"){
+          return "Unknown"
+        } else{
+          var key = path[i];
+          if(key[0]=='[') {
+            key = key.substring(1,key.length-1) 
+            obj = obj[key];
+          } else{
+            obj = obj[key];  
+          }
+          
+        }
+      } 
+      obj[path[i]]= value;
+      return baseObj;
+    },
+    omit:(obj, arr)=>{
+      var baseObj={}
+      for(key in obj){
+        if(arr.indexOf(key) == -1){
+          baseObj[key]= obj[key]
+        }
+      }
+      return baseObj;
+        
+    }
+};    
+    
+const obj = {
+  user: {
+    profile: {
+      name: 'John Doe',
+      age: 30
+    },
+    settings: null
+  },
+  data: [
+    { id: 1, value: 'first' },
+    { id: 2, value: 'second' }
+  ]
+};
+const a =[1,2,3,4,5,6,7]
+console.log(_.get(obj, 'user'));
+console.log(_.get(obj,'data.[0]'));
+console.log(_.set(obj,'data.[0].value', 'ju'));
+console.log(_.get(a,'4'));
+console.log(_.get(a,4));
+console.log(_.set(obj, 'user.profile.name','surya'));
+console.log(_.omit(obj, ['data']));
