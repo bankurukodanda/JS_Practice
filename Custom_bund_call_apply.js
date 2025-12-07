@@ -1,10 +1,11 @@
-//Custom Bind
+
 /**
 * Bind
 * Invokes a function immediately with a specified this value and arguments passed individually.
 * function.call(thisArg, arg1, arg2, ...)
 *
 **/
+//Custom Bind
 Function.prototype.myBind = function(...args){
  let obj = this;
  return function (...args2) {
@@ -19,6 +20,7 @@ Function.prototype.myBind = function(...args){
 * function.apply(thisArg, [argsArray])
 *
 **/
+//Custom Apply
 Function.prototype.myApply = function(...args){
  var context = args[0];
  
@@ -27,13 +29,14 @@ Function.prototype.myApply = function(...args){
 
 }
 
-//Custom Call
+
 /**
 * Bind
 * Creates a new function that, when called, has its this keyword permanently bound to the provided value. It does not invoke the function immediately.
 * const newFunction = function.bind(thisArg, arg1, arg2, ...)
 *
 **/
+//Custom Call
 Function.prototype.myCall = function(...args){
  var context = args[0];
  
