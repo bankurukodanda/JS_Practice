@@ -1,0 +1,48 @@
+var EventEmitter = (()=>{
+   let instance
+    function Temp(){
+        if(instance){
+            return instance
+        }
+        let index= 100;
+        let callbacks =[];
+        this.subscribe = function(cb){
+            
+            callbacks.push({key:++index, value:cb});
+            // console.log(callbacks);
+            return index;
+        }
+        this.emit = function(cb){
+            callbacks.forEach(function(cb, index){
+                cb.value("Test", index);
+            })
+        }
+        this.unsubscribe= function(subscribe){
+            let list = callbacks.filter((c)=>{
+                return c.key != subscribe;
+            })
+            callbacks = list;
+        }
+        this.destroy = function(){
+            callbacks.length =0;
+        }
+        instance = this;
+        return this;
+    }
+    return Temp;
+})();
+
+var a = new EventEmitter();
+const subIndex = a.subscribe(function(){
+    console.log("subscribe a")
+})
+
+var b = new EventEmitter();
+b.subscribe(function(){
+    console.log("subscribe b")
+})
+// a.unsubscribe(subIndex);
+var d = new EventEmitter();
+d.destroy();
+var c = new EventEmitter();
+c.emit();
