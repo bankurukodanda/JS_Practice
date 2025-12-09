@@ -1,0 +1,22 @@
+var SingleTon = (()=>{
+   let instance
+    function Temp(){
+        if(instance){
+            return instance
+        }
+        let a= 0;
+        this.count = function(){
+            console.log("Inst 1:", ++a)
+        }
+        instance = this;
+        return this;
+    }
+    return Temp;
+})();
+
+var a = new SingleTon();
+a.count()
+
+
+var b = new SingleTon();
+b.count()
