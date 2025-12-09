@@ -1,0 +1,51 @@
+const originalSetTimeout = window.setTimeout;
+const originalSetInterval = window.setInterval;
+const originalClearTimeout = window.clearTimeout;
+const originalClearInterval = window.clearInterval;
+
+const timers = [];
+const intervals = [];
+
+window.setTimeout=function(cb, delay, ...args){
+    var timerId = originalSetTimeout(cb, delay, ...args);
+    timers.push(timerId);
+    return timerId;
+}
+window.setInterval = function(cb, interval, ...args){
+    var intervalId = originalSetInterval(cb, interval, ...args);
+    intervals.push(intervalId);
+    return intervalId;
+}
+window.clearTimers = function(){
+    timers.forEach(function(timer){
+        clearTimeout(timer);
+    })
+    console.log("clear timers");
+    timers.length=0;
+    console.log(timers)
+    intervals.forEach(function(interval){
+        clearInterval(interval);
+    })
+    console.log("clear Intervals");
+    intervals.length=0;
+}
+
+setTimeout(function(){
+    console.log("timeout")
+},10000);
+setTimeout(function(){
+    console.log("timeout")
+},12000);
+setTimeout(function(){
+    console.log("timeout")
+},11000);
+setInterval(function(){
+    console.log("interval")
+}, 10000);
+setInterval(function(){
+    console.log("interval")
+}, 11000);
+setInterval(function(){
+    console.log("interval")
+}, 12000);
+clearTimers();
