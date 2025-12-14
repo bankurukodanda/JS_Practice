@@ -1,0 +1,25 @@
+var cusClassName = function(...args){
+    let result =[];
+    if(!args)
+        return ''
+    args.forEach(arg=>{
+        if(typeof arg == 'string' || typeof arg == 'Integer'){
+            result.push(arg);
+        } else if(Array.isArray(arg)){
+            let arrResult = cusClassName(...arg);
+            result.push(arrResult);
+        } else if(arg != null){
+            if(typeof arg == 'object'){
+                for(key in arg){
+                    if(arg[key]){
+                        result.push(key)
+                    }
+                }
+            }
+        }
+    })
+    return result.join(' ');
+}
+console.log(cusClassName('a','b','c',['ab','bc','de'], {"qw":true, "we": false, "er":0, "ff":1}));
+
+Resource : https://medium.com/@soumya.samanvaya98/how-to-create-customisable-react-components-using-classnames-library-c0e15d5037f0
